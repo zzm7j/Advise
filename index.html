@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تواصل معنا</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 450px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(14px);
+  padding: 30px;
+  border-radius: 20px;
+  color: #fff;
+  box-shadow: 0 25px 45px rgba(0,0,0,0.35);
+}
+
+h2 {
+  text-align: center;
+  margin: 0;
+  font-size: 26px;
+}
+
+p {
+  text-align: center;
+  opacity: 0.85;
+  font-size: 14px;
+  margin-bottom: 25px;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 22px;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 12px 10px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(255,255,255,0.4);
+  color: #fff;
+  outline: none;
+  font-size: 15px;
+}
+
+select option {
+  color: #000;
+}
+
+label {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255,255,255,0.7);
+  pointer-events: none;
+  transition: 0.3s;
+  font-size: 14px;
+}
+
+textarea + label {
+  top: 20px;
+}
+
+input:focus + label,
+textarea:focus + label,
+select:focus + label,
+input:valid + label,
+textarea:valid + label,
+select:valid + label {
+  top: -6px;
+  font-size: 12px;
+  color: #00e6ff;
+}
+
+button {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #00e6ff, #00b3ff);
+  color: #000;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(0,230,255,0.4);
+}
+
+.status {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.success { color: #00ffb3; }
+.error { color: #ff6b6b; }
+</style>
+</head>
+
+<body>
+
+<div class="form-container">
+  <h2> نصيحة</h2>
+  <p></p>
+
+  <form id="contactForm" action="https://formspree.io/f/xlgloeod" method="POST">
+    
+   
+
+    <div class="input-group">
+      <input type="email" name="email" required>
+      <label>البريد الإلكتروني</label>
+    </div>
+
+   
+
+    <div class="input-group">
+      <textarea name="message" rows="4" required></textarea>
+      <label>رسالتك</label>
+    </div>
+
+    <!-- Formspree options -->
+    <input type="hidden" name="_subject" value="📨 طلب جديد من الموقع">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="text" name="_gotcha" style="display:none">
+
+    <button type="submit">إرسال الرسالة</button>
+    <div class="status" id="status"></div>
+  </form>
+</div>
+
+<script>
+const form = document.getElementById("contactForm");
+const status = document.getElementById("status");
+
+form.addEventListener("submit", async function(e) {
+  e.preventDefault();
+  status.textContent = "⏳ يتم الإرسال...";
+  status.className = "status";
+
+  const data = new FormData(form);
+
+  try {
+    const response = await fetch(form.action, {
+      method: "POST",
+      body: data,
+      headers: { "Accept": "application/json" }
+    });
+
+    if (response.ok) {
+      status.textContent = "✅ تم إرسال رسالتك بنجاح!";
+      status.classList.add("success");
+      form.reset();
+    } else {
+      throw new Error();
+    }
+  } catch {
+    status.textContent = "❌ حصل خطأ، حاول مرة أخرى";
+    status.classList.add("error");
+  }
+});
+</script>
+
+</body>
+</html>
