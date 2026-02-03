@@ -3,184 +3,399 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Advise</title>
+<title>نصيحة</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
+:root {
+  --accent: #00e6ff;
+  --accent-dim: rgba(0, 230, 255, 0.15);
+  --accent-glow: rgba(0, 230, 255, 0.4);
+  --glass: rgba(255, 255, 255, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --text: #fff;
+  --text-muted: rgba(255, 255, 255, 0.5);
+  --success: #34e8a0;
+  --error: #ff5f6b;
+}
+
 * {
   box-sizing: border-box;
-  font-family: "Segoe UI", Tahoma, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 body {
   min-height: 100vh;
-  margin: 0;
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  background: #0a1218;
+  color: var(--text);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
+  position: relative;
+  overflow: hidden;
 }
 
-.form-container {
+/* ─── Animated background ─── */
+.bg-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.bg-layer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 80%, rgba(12, 60, 80, 0.7) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 75% 20%, rgba(10, 40, 70, 0.6) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 50% 50%, rgba(15, 50, 60, 0.4) 0%, transparent 70%);
+}
+
+.bg-layer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Floating orbs */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.35;
+  animation: drift 18s ease-in-out infinite alternate;
+}
+.orb-1 { width: 380px; height: 380px; background: #0d5c6e; top: -100px; left: -80px; animation-delay: 0s; }
+.orb-2 { width: 280px; height: 280px; background: #0a3d5c; bottom: -60px; right: -60px; animation-delay: -5s; }
+.orb-3 { width: 200px; height: 200px; background: #134e5e; top: 40%; left: 60%; animation-delay: -10s; }
+
+@keyframes drift {
+  to { transform: translate(40px, 30px) scale(1.08); }
+}
+
+/* ─── Card ─── */
+.card {
+  position: relative;
+  z-index: 1;
   width: 100%;
-  max-width: 450px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(14px);
-  padding: 30px;
-  border-radius: 20px;
-  color: #fff;
-  box-shadow: 0 25px 45px rgba(0,0,0,0.35);
+  max-width: 440px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(22px) saturate(1.3);
+  -webkit-backdrop-filter: blur(22px) saturate(1.3);
+  border-radius: 24px;
+  padding: 44px 34px 36px;
+  box-shadow:
+    0 2px 0 rgba(255,255,255,0.05) inset,
+    0 30px 60px rgba(0,0,0,0.4),
+    0 0 0 1px var(--glass-border);
+  animation: cardIn 0.7s cubic-bezier(.22,.68,0,1.2) both;
 }
 
-h2 {
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(28px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0)   scale(1);    }
+}
+
+/* Top glow accent line */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 15%; right: 15%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  border-radius: 999px;
+}
+
+/* ─── Header ─── */
+.card-header {
   text-align: center;
-  margin: 0;
-  font-size: 26px;
+  margin-bottom: 34px;
 }
 
-p {
-  text-align: center;
-  opacity: 0.85;
-  font-size: 14px;
-  margin-bottom: 25px;
+.icon-wrap {
+  width: 56px; height: 56px;
+  margin: 0 auto 18px;
+  border-radius: 16px;
+  background: var(--accent-dim);
+  border: 1px solid rgba(0,230,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  animation: iconPop 0.5s 0.3s cubic-bezier(.22,.68,0,1.3) both;
+}
+.icon-wrap svg { width: 26px; height: 26px; }
+
+@keyframes iconPop {
+  from { opacity: 0; transform: scale(0.7); }
+  to   { opacity: 1; transform: scale(1);   }
 }
 
+.card-header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  animation: fadeUp 0.5s 0.4s both;
+}
+
+.card-header p {
+  margin-top: 6px;
+  font-size: 13.5px;
+  color: var(--text-muted);
+  font-weight: 300;
+  animation: fadeUp 0.5s 0.5s both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* ─── Inputs ─── */
 .input-group {
   position: relative;
-  margin-bottom: 22px;
+  margin-bottom: 24px;
+  animation: fadeUp 0.5s both;
+}
+.input-group:nth-child(1) { animation-delay: 0.55s; }
+.input-group:nth-child(2) { animation-delay: 0.65s; }
+
+.input-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  transition: color 0.3s;
+  letter-spacing: 0.3px;
 }
 
-input, textarea, select {
-  width: 100%;
-  padding: 12px 10px;
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid rgba(255,255,255,0.4);
-  color: #fff;
-  outline: none;
-  font-size: 15px;
+.input-group:focus-within label {
+  color: var(--accent);
 }
 
-select option {
-  color: #000;
+.input-wrap {
+  position: relative;
 }
 
-label {
+.input-wrap .icon {
   position: absolute;
-  right: 10px;
+  left: 14px;
   top: 50%;
   transform: translateY(-50%);
-  color: rgba(255,255,255,0.7);
+  width: 18px; height: 18px;
+  color: var(--text-muted);
+  transition: color 0.3s;
   pointer-events: none;
-  transition: 0.3s;
-  font-size: 14px;
+}
+.input-wrap.textarea-wrap .icon { top: 16px; transform: none; }
+
+.input-group:focus-within .icon { color: var(--accent); }
+
+input[type="email"],
+textarea {
+  width: 100%;
+  padding: 13px 14px 13px 42px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  color: var(--text);
+  font-size: 14.5px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
 }
 
-textarea + label {
-  top: 20px;
+input[type="email"]::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+  font-weight: 300;
 }
 
-input:focus + label,
-textarea:focus + label,
-select:focus + label,
-input:valid + label,
-textarea:valid + label,
-select:valid + label {
-  top: -6px;
-  font-size: 12px;
-  color: #00e6ff;
+input[type="email"]:focus,
+textarea:focus {
+  border-color: rgba(0, 230, 255, 0.4);
+  background: rgba(0,230,255,0.04);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 110px;
+  padding-top: 14px;
+  line-height: 1.55;
+}
+
+/* ─── Button ─── */
+.btn-wrap {
+  margin-top: 30px;
+  animation: fadeUp 0.5s 0.75s both;
 }
 
 button {
   width: 100%;
-  padding: 13px;
+  padding: 14px;
   border: none;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #00e6ff, #00b3ff);
-  color: #000;
-  font-size: 16px;
-  font-weight: bold;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #00d4ec, #00b3ff);
+  color: #0a1218;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
   cursor: pointer;
-  transition: 0.3s;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s, box-shadow 0.25s;
+  box-shadow: 0 4px 20px rgba(0,180,255,0.25);
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.25), transparent 60%);
+  pointer-events: none;
 }
 
 button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 25px rgba(0,230,255,0.4);
+  box-shadow: 0 8px 30px rgba(0,180,255,0.38);
 }
 
+button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(0,180,255,0.2);
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ─── Status ─── */
 .status {
-  margin-top: 15px;
+  margin-top: 18px;
   text-align: center;
-  font-size: 14px;
+  font-size: 13.5px;
+  min-height: 20px;
+  font-weight: 400;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.35s, transform 0.35s, color 0.3s;
 }
+.status.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.status.success { color: var(--success); }
+.status.error   { color: var(--error);   }
+.status.loading { color: var(--text-muted); }
 
-.success { color: #00ffb3; }
-.error { color: #ff6b6b; }
+/* ─── Responsive ─── */
+@media (max-width: 480px) {
+  .card { padding: 34px 22px 28px; border-radius: 20px; }
+}
 </style>
 </head>
 
 <body>
 
-<div class="form-container">
-  <h2> نصيحة</h2>
-  <p></p>
+<!-- Background -->
+<div class="bg-layer">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<!-- Card -->
+<div class="card">
+
+  <div class="card-header">
+    <div class="icon-wrap">
+      <!-- envelope icon -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+        <polyline points="22,6 12,13 2,6"/>
+      </svg>
+    </div>
+    <h1>نصيحة</h1>
+    <p>أرسل لنا رسالة وسنرد في أقرب وقت ممكن</p>
+  </div>
 
   <form id="contactForm" action="https://formspree.io/f/xlgloeod" method="POST">
-    
-   
 
     <div class="input-group">
-      <input type="email" name="email" required>
       <label>البريد الإلكتروني</label>
+      <div class="input-wrap">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+        </svg>
+        <input type="email" name="email" placeholder="example@email.com" required>
+      </div>
     </div>
-
-   
 
     <div class="input-group">
-      <textarea name="message" rows="4" required></textarea>
       <label>رسالتك</label>
+      <div class="input-wrap textarea-wrap">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        <textarea name="message" placeholder="اكتب رسالتك هنا…" required></textarea>
+      </div>
     </div>
 
-    <!-- Formspree options -->
+    <!-- Formspree hidden fields -->
     <input type="hidden" name="_subject" value="📨 طلب جديد من الموقع">
     <input type="hidden" name="_captcha" value="false">
-    <input type="text" name="_gotcha" style="display:none">
+    <input type="text"   name="_gotcha"  style="display:none" tabindex="-1" autocomplete="off">
 
-    <button type="submit">إرسال الرسالة</button>
+    <div class="btn-wrap">
+      <button type="submit" id="submitBtn">إرسال الرسالة</button>
+    </div>
+
     <div class="status" id="status"></div>
   </form>
 </div>
 
 <script>
-const form = document.getElementById("contactForm");
-const status = document.getElementById("status");
+const form      = document.getElementById("contactForm");
+const status    = document.getElementById("status");
+const submitBtn = document.getElementById("submitBtn");
 
-form.addEventListener("submit", async function(e) {
+function showStatus(text, type) {
+  status.textContent = text;
+  status.className   = "status " + type + " visible";
+}
+
+form.addEventListener("submit", async function (e) {
   e.preventDefault();
-  status.textContent = "⏳ يتم الإرسال...";
-  status.className = "status";
-
-  const data = new FormData(form);
+  submitBtn.disabled = true;
+  showStatus("⏳  يتم الإرسال…", "loading");
 
   try {
-    const response = await fetch(form.action, {
-      method: "POST",
-      body: data,
-      headers: { "Accept": "application/json" }
+    const res = await fetch(form.action, {
+      method:  "POST",
+      body:    new FormData(form),
+      headers: { Accept: "application/json" }
     });
 
-    if (response.ok) {
-      status.textContent = "✅ تم إرسال رسالتك بنجاح!";
-      status.classList.add("success");
+    if (res.ok) {
+      showStatus("✅  تم إرسال رسالتك بنجاح!", "success");
       form.reset();
     } else {
       throw new Error();
     }
   } catch {
-    status.textContent = "❌ حصل خطأ، حاول مرة أخرى";
-    status.classList.add("error");
+    showStatus("❌  حصل خطأ، حاول مرة أخرى", "error");
   }
+
+  submitBtn.disabled = false;
 });
 </script>
 
