@@ -325,13 +325,13 @@ button:disabled {
       </svg>
     </div>
     <h1>نصيحة</h1>
-    <p>أرسل لنا رسالة وسنرد في أقرب وقت ممكن</p>
+
   </div>
 
   <form id="contactForm" action="https://formspree.io/f/xlgloeod" method="POST">
 
     <div class="input-group">
-      <label>البريد الإلكتروني</label>
+      <label id="emaill">البريد الإلكتروني</label>
       <div class="input-wrap">
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
@@ -367,6 +367,7 @@ button:disabled {
 const form      = document.getElementById("contactForm");
 const status    = document.getElementById("status");
 const submitBtn = document.getElementById("submitBtn");
+
 
 function showStatus(text, type) {
   status.textContent = text;
